@@ -2,43 +2,35 @@ import os
 os.environ['KIVY_TEXT'] = 'pil'
 
 from kivy.app import App
-from kivy.uix.widget import Widget
 from kivy.uix.button import Button
+from kivy.uix.textinput import TextInput
 from kivy.uix.anchorlayout import AnchorLayout
-from kivy.properties import ListProperty
+from kivy.uix.gridlayout import GridLayout
+
 
 class RootWidget(AnchorLayout):
 
     def __init__(self, **kwargs):
         super(RootWidget, self).__init__(**kwargs)
-        self.anchor_x='right'
-        self.anchor_y='bottom'
-        self.add_widget(Button(text='btn 1', size_hint=(.3, .1)))
-        self.anchor_x='left'
-        self.anchor_y='bottom'
-        self.add_widget(Button(text='btn 2', size_hint=(.3, .1)))
-        # cb = CustomBtn()
-        # cb.bind(pressed=self.btn_pressed)
-        # self.add_widget(cb)
-        
+        my_page = MyPage()
 
-    def btn_pressed(self, instance, pos):
-        print('pos: printed from root widget: {pos}'.format(pos=pos))
+        self.add_widget(my_page)
 
-class CustomBtn(Widget):
 
-    pressed = ListProperty([0, 0])
+class MyPage(GridLayout):
 
-    def on_touch_down(self, touch):
-        if self.collide_point(*touch.pos):
-            self.pressed = touch.pos
-            # we consumed the touch. return False here to propagate
-            # the touch further to the children.
-            return True
-        return super(CustomBtn, self).on_touch_down(touch)
+    def __init__(self, **kwargs):
+        super(MyPage, self).__init__(**kwargs)
+        self.cols = 2
+        self.size_hint = [.5, .5]
+        self.spacing = 5
+        self.row_default_height=30
+        for i in range(1, 7):
+            self.add_widget(TextInput())
+            self.add_widget(Button(text=f'К_{i}', font_size=10, size_hint_x=None, width=30))
 
-    def on_pressed(self, instance, pos):
-        print('pressed at {pos}'.format(pos=pos))
+
+
 
 class TestApp(App):
 
